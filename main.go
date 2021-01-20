@@ -44,8 +44,8 @@ func run(args []string, stdout io.Writer) error {
 	}
 
 	// Check if a target has been provided.
-	if len(flag.Args()) != 1 {
-		log.Error("no target provided")
+	if len(flag.Args()) != 2 {
+		log.Error("no target or ports provided")
 		usage(os.Args[0])
 		log.Errorf("exiting with status 1")
 		os.Exit(1)
@@ -61,6 +61,7 @@ func run(args []string, stdout io.Writer) error {
 		log.Infof("max open files: %d", opts.limit)
 		log.Infof("target: %s (%s)", flag.Arg(0), ips[0])
 		log.Infof("protocol: %s", opts.protocol)
+		log.Infof("range: %s", flag.Arg(1))
 	}
 
 	// If the program is not launched as root, disable ping requests and log.
@@ -72,13 +73,16 @@ func run(args []string, stdout io.Writer) error {
 	ps := &scan.Scanner{
 		IP:     flag.Arg(0),
 		Prot:   opts.protocol,
+		Range:  flag.Arg(1),
 		NoPing: opts.noping,
 		NoLogs: opts.stfu,
 		Lock:   semaphore.NewWeighted(opts.limit),
 	}
 
 	start := time.Now()
-	ps.Run(1, 65535, 500*time.Millisecond)
+	if err := ps.Run(1, 65535, 500*time.Millisecond); err != nil {
+		log.Fatalf("error running the scanner: %s", err)
+	}
 	elapsed := time.Since(start)
 
 	if !opts.stfu {
@@ -89,8 +93,16 @@ func run(args []string, stdout io.Writer) error {
 }
 
 func usage(name string) {
-	fmt.Printf("Usage of %s: [OPTIONS] target", name)
+	fmt.Printf("Usage of %s: [OPTIONS] target ports", name)
 	fmt.Print(`
+
+Target can be an IP address or an URL
+Ports can be:
+- all
+- reserved
+- x
+- x-y
+- a-b,c-d
 
 OPTIONS
 
