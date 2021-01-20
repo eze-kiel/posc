@@ -45,7 +45,7 @@ Usage of ./posc: [OPTIONS] target
 OPTIONS
 
 -h              Display this help
--limit int      Number of files that can be opened (default 2048)
+-limit int      Number of files that can be opened (default 1024)
 -np             Disable ping
 -p string       Protocol to use (default "tcp")
 -q              Enable quiet mode (no logs)

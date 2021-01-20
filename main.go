@@ -31,7 +31,7 @@ func run(args []string, stdout io.Writer) error {
 	var opts options
 
 	flag.BoolVar(&opts.help, "h", false, "Display this help")
-	flag.Int64Var(&opts.limit, "limit", 2048, "Number of files that can be opened")
+	flag.Int64Var(&opts.limit, "limit", 1024, "Number of files that can be opened")
 	flag.BoolVar(&opts.noping, "np", false, "Disable ping")
 	flag.StringVar(&opts.protocol, "p", "tcp", "Protocol to use")
 	flag.BoolVar(&opts.stfu, "q", false, "Enable quiet mode (no logs)")
@@ -95,7 +95,7 @@ func usage(name string) {
 OPTIONS
 
 -h		Display this help
--limit int	Number of files that can be opened (default 2048)
+-limit int	Number of files that can be opened (default 1024)
 -np		Disable ping
 -p string	Protocol to use (default "tcp")
 -q    		Enable quiet mode (no logs)
