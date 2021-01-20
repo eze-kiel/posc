@@ -42,7 +42,7 @@ func (ps *Scanner) Run(min, max int, timeout time.Duration) error {
 		go func(port int) {
 			defer ps.Lock.Release(1)
 			defer wg.Done()
-			ps.scanPort(p, timeout)
+			ps.scanPort(port, timeout)
 		}(p)
 	}
 	wg.Wait()
