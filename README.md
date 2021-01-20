@@ -1,6 +1,6 @@
 # posc
 
-High performance port scanner written in Golang.
+Small and fast port scanner written in Golang.
 
 ## Installation
 
