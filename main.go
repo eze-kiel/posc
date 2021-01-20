@@ -97,12 +97,7 @@ func usage(name string) {
 	fmt.Print(`
 
 Target can be an IP address or an URL
-Ports can be:
-- all
-- reserved
-- x
-- x-y
-- a-b,c-d
+Ports can be: "all, "reserved", "22", "22-443", "1-1023,1337-4242"...
 
 OPTIONS
 
