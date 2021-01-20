@@ -24,7 +24,6 @@ type Scanner struct {
 // Run runs the portScanner.
 func (ps *Scanner) Run(min, max int, timeout time.Duration) {
 	wg := sync.WaitGroup{}
-	defer wg.Wait()
 
 	if !ps.NoPing && !ps.NoLogs && !ps.pingIcmpEchoRequest(timeout) {
 		log.Warnf("%s does not respond to ICMP requets. If you think it drops ICMP packets, retry with flag -np.", ps.IP)
@@ -37,22 +36,23 @@ func (ps *Scanner) Run(min, max int, timeout time.Duration) {
 		go func(port int) {
 			defer ps.Lock.Release(1)
 			defer wg.Done()
-			scanPort(ps.IP, ps.Prot, port, timeout)
+			ps.scanPort(port, timeout)
 		}(port)
 	}
+	wg.Wait()
 }
 
-func scanPort(ip, prot string, port int, timeout time.Duration) {
-	target := fmt.Sprintf("%s:%d", ip, port)
-	conn, err := net.DialTimeout(prot, target, timeout)
+func (ps *Scanner) scanPort(port int, timeout time.Duration) {
+	target := fmt.Sprintf("%s:%d", ps.IP, port)
+	conn, err := net.DialTimeout(ps.Prot, target, timeout)
 	if err != nil {
 		if strings.Contains(err.Error(), "too many open files") {
 			time.Sleep(timeout)
-			scanPort(ip, prot, port, timeout)
+			ps.scanPort(port, timeout)
 		}
 		return
 	}
 
 	conn.Close()
-	fmt.Printf("%d/%s  \topen\n", port, prot)
+	fmt.Printf("%d/%s  \topen\n", port, ps.Prot)
 }
