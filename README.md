@@ -62,7 +62,7 @@ OPTIONS
 
 ## Demo
 
-[![Demo](https://asciinema.org/a/pXWO6QoLBlqufMwoIhcILyvF7.svg)](https://asciinema.org/a/pXWO6QoLBlqufMwoIhcILyvF7)
+[![Demo](https://asciinema.org/a/8f5fPT9Ou3VemY7kLtLwNKTDw.svg)](https://asciinema.org/a/8f5fPT9Ou3VemY7kLtLwNKTDw)
 
 ## License
 
