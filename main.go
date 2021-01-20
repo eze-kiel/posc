@@ -13,6 +13,14 @@ import (
 	"golang.org/x/sync/semaphore"
 )
 
+type options struct {
+	limit    int64
+	protocol string
+	noping   bool
+	stfu     bool
+	help     bool
+}
+
 func main() {
 	if err := run(os.Args, os.Stdout); err != nil {
 		log.Fatalf("%s\n", err)
@@ -20,19 +28,17 @@ func main() {
 }
 
 func run(args []string, stdout io.Writer) error {
-	var ulimit int64
-	var prot string
-	var noping, stfu, h bool
+	var opts options
 
-	flag.BoolVar(&h, "h", false, "Display this help")
-	flag.Int64Var(&ulimit, "limit", 2048, "Number of files that can be opened")
-	flag.BoolVar(&noping, "np", false, "Disable ping")
-	flag.StringVar(&prot, "p", "tcp", "Protocol to use")
-	flag.BoolVar(&stfu, "q", false, "Enable quiet mode (no logs)")
+	flag.BoolVar(&opts.help, "h", false, "Display this help")
+	flag.Int64Var(&opts.limit, "limit", 2048, "Number of files that can be opened")
+	flag.BoolVar(&opts.noping, "np", false, "Disable ping")
+	flag.StringVar(&opts.protocol, "p", "tcp", "Protocol to use")
+	flag.BoolVar(&opts.stfu, "q", false, "Enable quiet mode (no logs)")
 	flag.Parse()
 
 	// Display help is asked and exit.
-	if h {
+	if opts.help {
 		usage(os.Args[0])
 		os.Exit(0)
 	}
@@ -51,31 +57,31 @@ func run(args []string, stdout io.Writer) error {
 	}
 
 	// Some recap about parameters.
-	if !stfu {
-		log.Infof("max open files: %d", ulimit)
+	if !opts.stfu {
+		log.Infof("max open files: %d", opts.limit)
 		log.Infof("target: %s (%s)", flag.Arg(0), ips[0])
-		log.Infof("protocol: %s", prot)
+		log.Infof("protocol: %s", opts.protocol)
 	}
 
 	// If the program is not launched as root, disable ping requests and log.
-	if os.Getenv("SUDO_USER") == "" && !stfu {
+	if os.Getenv("SUDO_USER") == "" && !opts.stfu {
 		log.Warn("not running as root, ping has been disabled.")
-		noping = true
+		opts.noping = true
 	}
 
 	ps := &scan.Scanner{
 		IP:     flag.Arg(0),
-		Prot:   prot,
-		NoPing: noping,
-		NoLogs: stfu,
-		Lock:   semaphore.NewWeighted(ulimit),
+		Prot:   opts.protocol,
+		NoPing: opts.noping,
+		NoLogs: opts.stfu,
+		Lock:   semaphore.NewWeighted(opts.limit),
 	}
 
 	start := time.Now()
 	ps.Run(1, 65535, 500*time.Millisecond)
 	elapsed := time.Since(start)
 
-	if !stfu {
+	if !opts.stfu {
 		log.Info("scan ended")
 		log.Infof("time elapsed: %s", elapsed)
 	}
