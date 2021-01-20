@@ -13,13 +13,13 @@ $ posc <ip or address>
 In order to enable ping requests, you must launch it as root:
 
 ```
-$ sudo posc 127.0.0.1
+$ sudo posc <ip or address>
 ```
 
 If `posc` can't reach the target with ICMP, it will warn you and stop the scan. You can ask it to scan even if the target doesn't responds to ICMP ping requests with the flag `-np`:
 
 ```
-$ sudo posc -np 127.0.0.1
+$ sudo posc -np <ip or address>
 ```
 
 The complete list of the options is available with the flag `-h`:
