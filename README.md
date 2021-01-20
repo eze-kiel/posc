@@ -2,6 +2,20 @@
 
 High performance port scanner written in Golang.
 
+## Installation
+
+You can either:
+
+1. Clone the repo and build it (Golang is required):
+
+```
+$ git clone https://github.com/eze-kiel/posc.git
+$ cd posc
+$ go build .
+```
+
+2. Download the latest build [from the releases](https://github.com/eze-kiel/posc/releases)
+
 ## Usage
 
 Most simple usage:
