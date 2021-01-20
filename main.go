@@ -95,7 +95,7 @@ func usage(name string) {
 OPTIONS
 
 -h		Display this help
--limit int	Number of files that can be opened (default 1024)
+-limit int	Number of files that can be opened (default 2048)
 -np		Disable ping
 -p string	Protocol to use (default "tcp")
 -q    		Enable quiet mode (no logs)
