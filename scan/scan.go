@@ -24,7 +24,7 @@ type Scanner struct {
 }
 
 // Run runs the portScanner.
-func (ps *Scanner) Run(min, max int, timeout time.Duration) error {
+func (ps *Scanner) Run(timeout time.Duration) error {
 	wg := sync.WaitGroup{}
 
 	if !ps.NoPing && !ps.NoLogs && !ps.pingIcmpEchoRequest(timeout) {

@@ -80,7 +80,7 @@ func run(args []string, stdout io.Writer) error {
 	}
 
 	start := time.Now()
-	if err := ps.Run(1, 65535, 500*time.Millisecond); err != nil {
+	if err := ps.Run(500 * time.Millisecond); err != nil {
 		log.Fatalf("error running the scanner: %s", err)
 	}
 	elapsed := time.Since(start)
