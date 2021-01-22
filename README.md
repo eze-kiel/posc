@@ -2,6 +2,8 @@
 
 (Another) Small and fast port scanner written in Golang.
 
+This is more a PoC I wrote for [scan-exporter](https://github.com/devops-works/scan-exporter) than a real program.
+
 ## Installation
 
 You can either:
